@@ -91,3 +91,34 @@ ylabel('PM10: mug/m^3')
 lsline
 M = corrcoef(x,y);
 indice_di_correlazione = M(1, 2)
+
+% Vendita benzina
+x = t.Benzina_vendita_rete_ord
+scatter(x,y,'filled')
+title('Vendita benzina e PM10')
+xlabel('Benzina: tonnellate')
+ylabel('PM10: mug/m^3')
+lsline
+M = corrcoef(x,y);
+indice_di_correlazione = M(1, 2)
+
+% Vendita gasolio per motori
+x = t.Gasolio_motori_rete_ord
+scatter(x,y,'filled')
+title('Vendita gasolio e PM10')
+xlabel('Gasolio: tonnellate')
+ylabel('PM10: mug/m^3')
+lsline
+M = corrcoef(x,y);
+indice_di_correlazione = M(1, 2)
+
+% Vendita gasolio per riscaldamento
+x = t.Gasolio_riscaldamento
+scatter(x,y,'filled')
+title('Vendita gasolio e PM10')
+xlabel('Gasolio: tonnellate')
+ylabel('PM10: mug/m^3')
+lsline
+M = corrcoef(x,y);
+indice_di_correlazione = M(1, 2)
+
