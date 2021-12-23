@@ -6,119 +6,50 @@
 
 load('G08.mat')
 
-% Grafico per concentrazioni
-stackedplot(t, {'NO2', 'NOx', 'PM10', 'O3'}, "XVariable","Data")
-matrice_di_correlazione_gas = corrcoef(t{:, {'NO2', 'NOx', 'PM10', 'O3'}})
+dati_unici = t(:,{'Nome_staz','PM10','Temperatura', 'Pioggia_cum','Umidita_relativa','O3','NOx','NO2', 'Benzina_vendita_rete_ord', 'Gasolio_motori_rete_ord', 'Gasolio_riscaldamento'});
+dati_unici.Properties.VariableNames = {'Stazione','PM10', 'Temperatura','Pioggia','Umidita','O3','NOx','NO2', 'Benzina', 'Gasolio_motori', 'Gasolio_risc'};
 
-% Grafico per eventi climatici
-stackedplot(t, {'Temperatura', 'Umidita_relativa', 'Pioggia_cum'}, "XVariable","Data")
-matrice_di_correlazione_clima = corrcoef(t{:, {'Temperatura', 'Umidita_relativa', 'Pioggia_cum'}})
+stat = grpstats(dati_unici,'Stazione',{'mean','std','min','max'}, 'DataVars',{'PM10'}) % Statistiche per PM10
 
-% Grafico per carburanti
-stackedplot(t, {'Benzina_vendita_rete_ord', 'Gasolio_motori_rete_ord', 'Gasolio_riscaldamento'}, "XVariable","Data")
-matrice_di_correlazione_carburanti = corrcoef(t{:, {'Benzina_vendita_rete_ord', 'Gasolio_motori_rete_ord', 'Gasolio_riscaldamento'}})
-
-% Stats
-stackedplot(t, {'NO2', 'Benzina_vendita_rete_ord'}, "XVariable","Data")
-scatter(t.Benzina_vendita_rete_ord, t.NO2)
-lsline
-
-% Dipendenze con NO2
-vn = t.Properties.VariableNames'
-fitlm(t(:, [vn(end-8:end); vn(end-9)]))
-corrcoef(t{:, vn(end-8:end)})
+% Matrice di correlazione tra le variabili
+corr_matrix_t = corr(dati_unici{:,2:end});
+matrice_rho_t = array2table(corr_matrix_tG1, 'VariableNames' ,{'PM10', 'Temperatura','Pioggia','Umidita','O3','NOx','NO2', 'Benzina', 'Gasolio_motori', 'Gasolio_risc'}, ...
+                              'RowNames', {'PM10','Temperatura','Pioggia','Umidita','O3','NOx','NO2', 'Benzina', 'Gasolio_motori', 'Gasolio_risc'})
 
 
-% GRAFICI PM10 %
-y = t.PM10;
+[S,AX,BigAx,H,HAx] = plotmatrix(dati_unici{:,2:end});
+title 'Matrice Grafici Per Analisi Correlazione Stazione Unica';
+AX(1,1).YLabel.String = 'PM10'; 
+AX(2,1).YLabel.String = 'Temperatura'; 
+AX(3,1).YLabel.String = 'Pioggia'; 
+AX(4,1).YLabel.String = 'Umidità'; 
+AX(5,1).YLabel.String = 'O3'; 
+AX(6,1).YLabel.String = 'NOx';
+AX(7,1).YLabel.String = 'NO2';
+AX(8,1).YLabel.String = 'Benzina';
+AX(9,1).YLabel.String = 'Gasolio_motori';
+AX(10,1).YLabel.String = 'Gasolio_risc';
 
-% Umidità - PM10
-x = t.Umidita_relativa;
-scatter(x,y,'filled')
-title('Umidità e PM10')
-xlabel('Umidità: %')
-ylabel('PM10: mug/m^3')
-lsline
-M = corrcoef(x,y);
-indice_di_correlazione = M(1, 2)
+AX(10,1).XLabel.String = 'PM10'; 
+AX(10,2).XLabel.String = 'Temperatura'; 
+AX(10,3).XLabel.String = 'Pioggia'; 
+AX(10,4).XLabel.String = 'Umidità'; 
+AX(10,5).XLabel.String = 'O3'; 
+AX(10,6).XLabel.String = 'NOx';
+AX(10,7).XLabel.String = 'NO2';
+AX(10,8).XLabel.String = 'Benzina';
+AX(10,9).XLabel.String = 'Gasolio motori';
+AX(10,10).XLabel.String = 'Gasolio risc';
 
-% Temperatura - PM10
-x = t.Temperatura;
-scatter(x,y,'filled')
-title('Temperatura e PM10')
-xlabel('Temperatura: °')
-ylabel('PM10: mug/m^3')
-lsline
-M = corrcoef(x,y);
-indice_di_correlazione = M(1, 2)
+S(1,2).Color = 'r';
+S(1,3).Color = 'r';
+S(1,4).Color = 'r';
+S(1,5).Color = 'r';
+S(1,6).Color = 'r';
+S(1,7).Color = 'r';
+S(1,8).Color = 'r';
+S(1,9).Color = 'r';
+S(1,10).Color = 'r';
 
-% Pioggia - PM10
-x = t.Pioggia_cum;
-scatter(x,y,'filled')
-title('Pioggia e PM10')
-xlabel('Pioggia: nm')
-ylabel('PM10: mug/m^3')
-lsline
-M = corrcoef(x,y);
-indice_di_correlazione = M(1, 2)
-
-% Ozono
-x = t.O3;
-scatter(x,y,'filled')
-title('O3 e PM10')
-xlabel('O3: mug/m^3')
-ylabel('PM10: mug/m^3')
-lsline
-M = corrcoef(x,y);
-indice_di_correlazione = M(1, 2)
-
-% Ossidi Azoto
-x = t.NOx;
-scatter(x,y,'filled')
-title('NOx e PM10')
-xlabel('NOx: mug/m^3')
-ylabel('PM10: mug/m^3')
-lsline
-M = corrcoef(x,y);
-indice_di_correlazione = M(1, 2)
-
-% Biossido di azoto
-x = t.NO2
-scatter(x,y,'filled')
-title('NO2 e PM10')
-xlabel('NO2: mug/m^3')
-ylabel('PM10: mug/m^3')
-lsline
-M = corrcoef(x,y);
-indice_di_correlazione = M(1, 2)
-
-% Vendita benzina
-x = t.Benzina_vendita_rete_ord
-scatter(x,y,'filled')
-title('Vendita benzina e PM10')
-xlabel('Benzina: tonnellate')
-ylabel('PM10: mug/m^3')
-lsline
-M = corrcoef(x,y);
-indice_di_correlazione = M(1, 2)
-
-% Vendita gasolio per motori
-x = t.Gasolio_motori_rete_ord
-scatter(x,y,'filled')
-title('Vendita gasolio e PM10')
-xlabel('Gasolio: tonnellate')
-ylabel('PM10: mug/m^3')
-lsline
-M = corrcoef(x,y);
-indice_di_correlazione = M(1, 2)
-
-% Vendita gasolio per riscaldamento
-x = t.Gasolio_riscaldamento
-scatter(x,y,'filled')
-title('Vendita gasolio e PM10')
-xlabel('Gasolio: tonnellate')
-ylabel('PM10: mug/m^3')
-lsline
-M = corrcoef(x,y);
-indice_di_correlazione = M(1, 2)
-
+S(6,7).Color = 'r';
+S(7,6).Color = 'r';
