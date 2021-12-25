@@ -6,14 +6,14 @@
 
 load('G08.mat')
 
-dati_unici = t(:,{'Nome_staz','PM10','Temperatura', 'Pioggia_cum','Umidita_relativa','O3','NOx','NO2', 'Benzina_vendita_rete_ord', 'Gasolio_motori_rete_ord', 'Gasolio_riscaldamento'});
-dati_unici.Properties.VariableNames = {'Stazione','PM10', 'Temperatura','Pioggia','Umidita','O3','NOx','NO2', 'Benzina', 'Gasolio_motori', 'Gasolio_risc'};
+dati_unici = t(:,{'Nome_staz','PM10','Temperatura', 'Pioggia_cum','Umidita_relativa','NOx','NO2', 'O3', 'Benzina_vendita_rete_ord', 'Gasolio_motori_rete_ord', 'Gasolio_riscaldamento'});
+dati_unici.Properties.VariableNames = {'Stazione','PM10', 'Temperatura','Pioggia','Umidita', 'NOx', 'NO2', 'O3', 'Benzina', 'Gasolio_motori', 'Gasolio_risc'};
 
 stat = grpstats(dati_unici,'Stazione',{'mean','std','min','max'}, 'DataVars',{'PM10'}) % Statistiche per PM10
 
 % Matrice di correlazione tra le variabili
 corr_matrix_t = corr(dati_unici{:,2:end});
-matrice_rho_t = array2table(corr_matrix_tG1, 'VariableNames' ,{'PM10', 'Temperatura','Pioggia','Umidita','O3','NOx','NO2', 'Benzina', 'Gasolio_motori', 'Gasolio_risc'}, ...
+matrice_rho_t = array2table(corr_matrix_t, 'VariableNames' ,{'PM10', 'Temperatura','Pioggia','Umidita','O3','NOx','NO2', 'Benzina', 'Gasolio_motori', 'Gasolio_risc'}, ...
                               'RowNames', {'PM10','Temperatura','Pioggia','Umidita','O3','NOx','NO2', 'Benzina', 'Gasolio_motori', 'Gasolio_risc'})
 
 
@@ -53,3 +53,53 @@ S(1,10).Color = 'r';
 
 S(6,7).Color = 'r';
 S(7,6).Color = 'r';
+
+% Backward per PM10 con alpha = 5%
+
+% lm Completo
+lm1 = fitlm(dati_unici,'ResponseVar','PM10', 'PredictorVars',{'Temperatura',...
+    'Pioggia','Umidita', 'NOx','NO2', 'O3', 'Benzina', 'Gasolio_motori', 'Gasolio_risc'});
+
+% lm senza Temperatura
+lm2 = fitlm(dati_unici,'ResponseVar','PM10', 'PredictorVars', ...
+    {'Pioggia','Umidita', 'NOx','NO2', 'O3', 'Benzina', 'Gasolio_motori', 'Gasolio_risc'});
+
+% lm senza Umidità
+lm3 = fitlm(dati_unici,'ResponseVar','PM10', 'PredictorVars', ...
+    {'Pioggia', 'NOx','NO2', 'O3', 'Benzina', 'Gasolio_motori', 'Gasolio_risc'});
+
+% lm senza Benzina
+lm4 = fitlm(dati_unici,'ResponseVar','PM10', 'PredictorVars', ...
+    {'Pioggia', 'NOx','NO2', 'O3', 'Gasolio_motori', 'Gasolio_risc'});
+
+% lm senza Gasolio_motori
+lm5 = fitlm(dati_unici,'ResponseVar','PM10', 'PredictorVars', ...
+    {'Pioggia', 'NOx','NO2', 'O3', 'Gasolio_risc'});
+
+% lm senza NO2
+lm6 = fitlm(dati_unici,'ResponseVar','PM10', 'PredictorVars', ...
+    {'Pioggia', 'NOx', 'O3', 'Gasolio_risc'})
+
+% Grafico del modello
+plot(lm6)
+title('fitlm per PM10')
+
+% RESIDUI
+resm6 = lm6.Residuals.Raw;
+
+nexttile % Grafico 1
+yline(mean(resm6),'r','LineWidth',2)
+plot(resm6)
+ylabel('Residuo')
+xlabel('Osservazione n°')
+title('Grafico dei residui - PM10')
+
+nexttile % Grafico 2
+histfit(resm6)
+title('Residui come una normale - PM10')
+% I residui si distribuiscono come una normale
+
+% Stepwise per verifica risultati
+stepwise_linear = stepwiselm(dati_unici,'Upper','linear', 'ResponseVar','PM10','PEnter', 0.05)
+% Regressori significativi = regressori 5° studio.
+% Regressori significativi per PM10 = PM10 + Pioggia + NOx + Gasolio per riscaldamento
