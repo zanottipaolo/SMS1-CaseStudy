@@ -84,14 +84,19 @@ lm6 = fitlm(dati_unici,'ResponseVar','PM10', 'PredictorVars', ...
 plot(lm6)
 title('fitlm per PM10')
 
+% Stepwise per verifica risultati
+stepwise_linear = stepwiselm(dati_unici,'Upper','linear', 'ResponseVar','PM10','PEnter', 0.05)
+% Regressori significativi = regressori 5° studio.
+% Regressori significativi per PM10 = PM10 + Pioggia + NOx + Gasolio per riscaldamento
+
 % RESIDUI
 resm6 = lm6.Residuals.Raw;
 
 nexttile % Grafico 1
-yline(mean(resm6),'r','LineWidth',2)
 plot(resm6)
 ylabel('Residuo')
 xlabel('Osservazione n°')
+yline(mean(resm6), 'Color', 'b', 'LineWidth', 2)
 title('Grafico dei residui - PM10')
 
 nexttile % Grafico 2
@@ -99,7 +104,5 @@ histfit(resm6)
 title('Residui come una normale - PM10')
 % I residui si distribuiscono come una normale
 
-% Stepwise per verifica risultati
-stepwise_linear = stepwiselm(dati_unici,'Upper','linear', 'ResponseVar','PM10','PEnter', 0.05)
-% Regressori significativi = regressori 5° studio.
-% Regressori significativi per PM10 = PM10 + Pioggia + NOx + Gasolio per riscaldamento
+qqplot(resm6)
+title('Distribuzione Quantili teorici - Quantili residui standardizzati')
