@@ -106,3 +106,20 @@ title('Residui come una normale - PM10')
 
 qqplot(resm6)
 title('Distribuzione Quantili teorici - Quantili residui standardizzati')
+
+% le variabili indipendenti sono correlate con i residui?
+[S,AX,BigAx,H,HAx] = plotmatrix(dati_unici{:,{'Pioggia','NOx','O3', 'Gasolio_risc'}}, resm6)
+title 'Correlazione Residui-Regressori'
+AX(1,1).YLabel.String = 'Residui'
+AX(1,1).XLabel.String = 'Pioggia'
+AX(1,2).XLabel.String = 'NOx'
+AX(1,3).XLabel.String = 'O3'
+AX(1,4).XLabel.String = 'Gasolio_risc'
+
+% conferma della assenza di correlazione tra residui e variabili
+% indipendenti
+mat_corr_residui = corrcoef([resm6, dati_unici.Pioggia,...
+    dati_unici.NOx, dati_unici.O3, dati_unici.Gasolio_risc])
+matrice_corr_residui = array2table(mat_corr_residui, 'VariableNames' ,...
+    {'Residuals','Pioggia','NOx','O3', 'Gasolio_risc'}, ...
+    'RowNames',{'Residuals','Pioggia','NOx','O3', 'Gasolio_risc'})
