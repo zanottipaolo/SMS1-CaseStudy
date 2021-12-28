@@ -141,3 +141,14 @@ mat_corr_residui = corrcoef([resm6, dati_unici.Pioggia,...
 matrice_corr_residui = array2table(mat_corr_residui, 'VariableNames' ,...
     {'Residuals','Pioggia','NOx','O3', 'Gasolio_risc'}, ...
     'RowNames',{'Residuals','Pioggia','NOx','O3', 'Gasolio_risc'})
+
+% Outliers
+residui_studentizzati = lm6.Residuals.Studentized
+residui_studentizzati(22)
+t.PM10(22) % Valore dell'outliers
+scatter(lm6.Fitted, residui_studentizzati)
+yline(2, '--b')
+yline(-2, '--b')
+
+stackedplot(t, {"PM10"}, 'XVariable', 'Data')
+
