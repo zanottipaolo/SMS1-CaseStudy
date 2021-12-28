@@ -90,6 +90,10 @@ lm5 = fitlm(dati_unici,'ResponseVar','PM10', 'PredictorVars', ...
 lm6 = fitlm(dati_unici,'ResponseVar','PM10', 'PredictorVars', ...
     {'Pioggia', 'NOx', 'O3', 'Gasolio_risc'})
 
+% lm senza O3
+lm_overfitting = fitlm(dati_unici,'ResponseVar','PM10', 'PredictorVars', ...
+    {'Pioggia', 'NOx', 'Gasolio_risc'})
+
 % Grafico del modello
 plot(lm6)
 title('fitlm per PM10')
