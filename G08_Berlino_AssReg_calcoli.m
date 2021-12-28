@@ -6,6 +6,16 @@
 
 load('G08.mat')
 
+%% Ispezione del dataset
+summary(t)
+
+%% Statistiche descrittive per PM10
+% (comprensione/descrizione dei fenomeni)
+media = mean(t.PM10)
+std = std(t.PM10)
+
+grpstats(t,'ARPA_ID_staz',{'mean','std','min','max'},'DataVars',{'PM10'})
+
 dati_unici = t(:,{'Nome_staz','PM10','Temperatura', 'Pioggia_cum','Umidita_relativa','NOx','NO2', 'O3', 'Benzina_vendita_rete_ord', 'Gasolio_motori_rete_ord', 'Gasolio_riscaldamento'});
 dati_unici.Properties.VariableNames = {'Stazione','PM10', 'Temperatura','Pioggia','Umidita', 'NOx', 'NO2', 'O3', 'Benzina', 'Gasolio_motori', 'Gasolio_risc'};
 
@@ -96,6 +106,7 @@ nexttile % Grafico 1
 plot(resm6)
 ylabel('Residuo')
 xlabel('Osservazione n°')
+yline(0,'r','LineWidth',3)
 yline(mean(resm6), 'Color', 'b', 'LineWidth', 2)
 title('Grafico dei residui - PM10')
 
