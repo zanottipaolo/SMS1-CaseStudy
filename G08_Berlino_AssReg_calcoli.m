@@ -118,6 +118,9 @@ title('Residui come una normale - PM10')
 qqplot(resm6)
 title('Distribuzione Quantili teorici - Quantili residui standardizzati')
 
+% Varianza dei residui
+plotResiduals(lm6, 'fitted', 'Marker','o')
+
 % le variabili indipendenti sono correlate con i residui?
 [S,AX,BigAx,H,HAx] = plotmatrix(dati_unici{:,{'Pioggia','NOx','O3', 'Gasolio_risc'}}, resm6)
 title 'Correlazione Residui-Regressori'
