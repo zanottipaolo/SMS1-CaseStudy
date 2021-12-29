@@ -13,6 +13,15 @@ summary(t)
 % (comprensione/descrizione dei fenomeni)
 media = mean(t.PM10)
 std = std(t.PM10)
+maxPM10 = max(t.PM10)
+minPM10 = min(t.PM10)
+
+mediaPM102016 = mean(t.PM10(1:12))
+mediaPM102017 = mean(t.PM10(13:24))
+mediaPM102018 = mean(t.PM10(25:36))
+mediaPM102019 = mean(t.PM10(37:48))
+mediaPM102020 = mean(t.PM10(49:60))
+mediaParzialePM102021 = mean(t.PM10(61:66))
 
 grpstats(t,'ARPA_ID_staz',{'mean','std','min','max'},'DataVars',{'PM10'})
 
