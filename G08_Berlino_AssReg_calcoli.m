@@ -179,4 +179,52 @@ media_NOx_2021 = mean(t.NOx(61:66))
 % Statistiche complete per NOx
 dati_unici_NOx = t(:,{'Nome_staz','NOx','Temperatura', 'Pioggia_cum','Umidita_relativa','PM10','NO2', 'O3', 'Benzina_vendita_rete_ord', 'Gasolio_motori_rete_ord', 'Gasolio_riscaldamento'})
 dati_unici_NOx.Properties.VariableNames = {'Stazione','NOx', 'Temperatura','Pioggia','Umidita', 'PM10', 'NO2', 'O3', 'Benzina', 'Gasolio_motori', 'Gasolio_risc'};
+
 statistiche_NOx = grpstats(dati_unici_NOx,'Stazione',{'mean','std','min','max'}, 'DataVars',{'NOx'})
+
+% Matrice di correlazione per l'inquinante NOx
+matrice_correlazione_t = corr(dati_unici_NOx{:,2:end});
+matrice_rho_t_NOx = array2table(matrice_correlazione_t, 'VariableNames' ,{'NOx', 'Temperatura','Pioggia','Umidita','O3','PM10','NO2', 'Benzina', 'Gasolio_motori', 'Gasolio_risc'}, ...
+                              'RowNames', {'NOx','Temperatura','Pioggia','Umidita','O3','PM10','NO2', 'Benzina', 'Gasolio_motori', 'Gasolio_risc'})
+
+% Grafici di correlazione
+
+% Temperatura - NOx
+x = t.NOx;
+y = t.Temperatura;
+sx = 50;
+scatter(x,y,sx,"green")
+title('Temperatura e NOx')
+xlabel('NOx (μg/m3)')
+ylabel('Temperatura (°C)')
+lsline
+
+% O3 - NOx
+x = t.NOx;
+y = t.O3;
+sx = 50;
+scatter(x,y,sx,"green")
+title('O3 e NOx')
+xlabel('NOx (μg/m3)')
+ylabel('O3 (μg/m3)')
+lsline
+
+% PM10 - NOx
+x = t.NOx;
+y = t.PM10;
+sx = 50;
+scatter(x,y,sx,"green")
+title('PM10 e NOx')
+xlabel('NOx (μg/m3)')
+ylabel('PM10 (μg/m3)')
+lsline
+
+% NO2 - NOx
+x = t.NOx;
+y = t.NO2;
+sx = 50;
+scatter(x,y,sx,"green")
+title('NO2 e NOx')
+xlabel('NOx (μg/m3)')
+ylabel('NO2 (μg/m3)')
+lsline
