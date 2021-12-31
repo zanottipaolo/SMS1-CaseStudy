@@ -1,5 +1,5 @@
 % Owners:
-% Zanotti Paolo
+% Zanotti Paolo              1074166
 % De Duro Federico      1073477
 % Ciullo Roberto        1074568
 % Bouchemal Saif        1074800
@@ -161,3 +161,22 @@ yline(-2, '--b')
 
 stackedplot(t, {"PM10"}, 'XVariable', 'Data')
 
+
+%% Ossidi di Azoto (NOx)
+
+% Statistiche per la comprensione del fenomeno
+std_NOx = std(t.NOx)
+massimo_NOx = max(t.NOx)
+minimo_NOx = min(t.NOx)
+media_NOx = mean(t.NOx)
+media_NOx_2016 = mean(t.NOx(1:12))
+media_NOx_2017 = mean(t.NOx(13:24))
+media_NOx_2018 = mean(t.NOx(25:36))
+media_NOx_2019 = mean(t.NOx(37:48))
+media_NOx_2020 = mean(t.NOx(49:60))
+media_NOx_2021 = mean(t.NOx(61:66))
+
+% Statistiche complete per NOx
+dati_unici_NOx = t(:,{'Nome_staz','NOx','Temperatura', 'Pioggia_cum','Umidita_relativa','PM10','NO2', 'O3', 'Benzina_vendita_rete_ord', 'Gasolio_motori_rete_ord', 'Gasolio_riscaldamento'})
+dati_unici_NOx.Properties.VariableNames = {'Stazione','NOx', 'Temperatura','Pioggia','Umidita', 'PM10', 'NO2', 'O3', 'Benzina', 'Gasolio_motori', 'Gasolio_risc'};
+statistiche_NOx = grpstats(dati_unici_NOx,'Stazione',{'mean','std','min','max'}, 'DataVars',{'NOx'})
