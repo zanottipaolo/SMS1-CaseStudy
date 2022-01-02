@@ -250,6 +250,7 @@ lm_3_NOx = fitlm(dati_unici_NOx,'ResponseVar','NOx', 'PredictorVars',{'Umidita',
     'PM10','NO2', 'Benzina', 'Gasolio_motori', 'Gasolio_risc'});
 
 % Linear Model senza Gasolio Riscaldamento
+% (Modello utilizzato)
 lm_4_NOx = fitlm(dati_unici_NOx,'ResponseVar','NOx', 'PredictorVars',{'Umidita', ...
     'PM10','NO2', 'Benzina', 'Gasolio_motori'});
 
@@ -261,4 +262,50 @@ check1_model_NOx= stepwiselm(dati_unici_NOx,'Upper','linear', 'ResponseVar','NOx
 
 % Secondo metodo
 check2_model_NOx = [t.Pioggia_cum, t.Umidita_relativa, t.Temperatura, t.O3, t.PM10, t.NO2]
-stepwisefit(check2_model_NOx,t.NOx)
+stepwisefit(check2_model_NOx,t.NOx);
+
+
+% Analisi dei residui
+
+residui_NOx = lm_4_NOx.Residuals.Raw;
+
+% 1, Grafico dei residui (media uguale a 0)
+nexttile
+plot(residui_NOx)
+ylabel('Residui')
+xlabel('Osservazioni')
+yline(0,'r','LineWidth',3)
+yline(mean(residui_NOx), 'Color', 'b', 'LineWidth', 2)
+title('Grafico dei residui - NOx')
+
+% 2. Distribuzione (Normale)
+nexttile
+histfit(residui_NOx)
+title('Residui come una normale - NOx')
+
+% 3. Andamento dei Percentili
+qqplot(residui_NOx)
+title('Distribuzione Quantili teorici - Quantili residui standardizzati')
+
+% 4. Incorrelazione dei regressori con i residui
+[S,AX,BigAx,H,HAx] = plotmatrix(dati_unici_NOx{:,{'Umidita','PM10','NO2', 'Benzina', 'Gasolio_motori'}}, residui_NOx)
+title 'Correlazione Residui-Regressori'
+AX(1,1).YLabel.String = 'Residui'
+AX(1,1).XLabel.String = 'Umidità'
+AX(1,2).XLabel.String = 'PM10'
+AX(1,3).XLabel.String = 'NO2'
+AX(1,4).XLabel.String = 'Benzina'
+AX(1,5).XLabel.String = 'Gasolio Motori'
+
+% Verifica incorrelazione tra residui e variabili indipendenti
+correlazione_residui_NOx_temp = corrcoef([residui_NOx, dati_unici_NOx.Umidita,...
+    dati_unici_NOx.PM10, dati_unici_NOx.NO2, dati_unici_NOx.Benzina, dati_unici_NOx.Gasolio_motori])
+
+correlazione_residui_NOx = array2table(correlazione_residui_NOx_temp, 'VariableNames' ,...
+    {'Residuals','Umidita','PM10','NO2', 'Benzina', 'Gasolio_motori'}, ...
+    'RowNames',{'Residuals','Umidita','PM10', 'NO2','Benzina', 'Gasolio_motori'})
+
+% 5. Varianza omogenea dei residui
+plotResiduals(lm_4_NOx, 'fitted', 'Marker','x')
+
+% 6. Ricerca degli Outliers
