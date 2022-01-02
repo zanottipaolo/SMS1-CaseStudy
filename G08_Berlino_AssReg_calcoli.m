@@ -180,12 +180,13 @@ media_NOx_2021 = mean(t.NOx(61:66))
 dati_unici_NOx = t(:,{'Nome_staz','NOx','Temperatura', 'Pioggia_cum','Umidita_relativa','PM10','NO2', 'O3', 'Benzina_vendita_rete_ord', 'Gasolio_motori_rete_ord', 'Gasolio_riscaldamento'})
 dati_unici_NOx.Properties.VariableNames = {'Stazione','NOx', 'Temperatura','Pioggia','Umidita', 'PM10', 'NO2', 'O3', 'Benzina', 'Gasolio_motori', 'Gasolio_risc'};
 
-statistiche_NOx = grpstats(dati_unici_NOx,'Stazione',{'mean','std','min','max'}, 'DataVars',{'NOx'})
+statistiche_NOx = grpstats(dati_unici_NOx,'Stazione',{'mean','std','min','max'}, 'DataVars',{'NOx'});
 
 % Matrice di correlazione per l'inquinante NOx
 matrice_correlazione_t = corr(dati_unici_NOx{:,2:end});
 matrice_rho_t_NOx = array2table(matrice_correlazione_t, 'VariableNames' ,{'NOx', 'Temperatura','Pioggia','Umidita','O3','PM10','NO2', 'Benzina', 'Gasolio_motori', 'Gasolio_risc'}, ...
                               'RowNames', {'NOx','Temperatura','Pioggia','Umidita','O3','PM10','NO2', 'Benzina', 'Gasolio_motori', 'Gasolio_risc'})
+
 
 % Grafici di correlazione
 
@@ -228,3 +229,36 @@ title('NO2 e NOx')
 xlabel('NOx (μg/m3)')
 ylabel('NO2 (μg/m3)')
 lsline
+
+
+% Stepwise Backward Elimination per gli Ossidi di Azoto con alpha = 5%
+
+% Linear Model Completo
+lm_completo_NOx = fitlm(dati_unici_NOx,'ResponseVar','NOx', 'PredictorVars',{'Temperatura',...
+    'Pioggia','Umidita', 'PM10','NO2', 'O3', 'Benzina', 'Gasolio_motori', 'Gasolio_risc'});
+
+% Linear Model senza la Temperatura
+lm_1_NOx = fitlm(dati_unici_NOx,'ResponseVar','NOx', 'PredictorVars',{...
+    'Pioggia','Umidita', 'PM10','NO2', 'O3', 'Benzina', 'Gasolio_motori', 'Gasolio_risc'});
+
+% Linear Model senza la Pioggia
+lm_2_NOx = fitlm(dati_unici_NOx,'ResponseVar','NOx', 'PredictorVars',{'Umidita', ...
+    'PM10','NO2', 'O3', 'Benzina', 'Gasolio_motori', 'Gasolio_risc'});
+
+% Linear Model senza O3
+lm_3_NOx = fitlm(dati_unici_NOx,'ResponseVar','NOx', 'PredictorVars',{'Umidita', ...
+    'PM10','NO2', 'Benzina', 'Gasolio_motori', 'Gasolio_risc'});
+
+% Linear Model senza Gasolio Riscaldamento
+lm_4_NOx = fitlm(dati_unici_NOx,'ResponseVar','NOx', 'PredictorVars',{'Umidita', ...
+    'PM10','NO2', 'Benzina', 'Gasolio_motori'});
+
+
+% Verifica del modello
+
+% Primo metodo
+check1_model_NOx= stepwiselm(dati_unici_NOx,'Upper','linear', 'ResponseVar','NOx','PEnter', 0.05);
+
+% Secondo metodo
+check2_model_NOx = [t.Pioggia_cum, t.Umidita_relativa, t.Temperatura, t.O3, t.PM10, t.NO2]
+stepwisefit(check2_model_NOx,t.NOx)
