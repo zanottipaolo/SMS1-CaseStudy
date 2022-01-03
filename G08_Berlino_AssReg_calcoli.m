@@ -12,7 +12,7 @@ summary(t)
 %% Statistiche descrittive per PM10
 % (comprensione/descrizione dei fenomeni)
 media = mean(t.PM10)
-std = std(t.PM10)
+std_PM10 = std(t.PM10)
 maxPM10 = max(t.PM10)
 minPM10 = min(t.PM10)
 
@@ -176,6 +176,8 @@ media_NOx_2019 = mean(t.NOx(37:48))
 media_NOx_2020 = mean(t.NOx(49:60))
 media_NOx_2021 = mean(t.NOx(61:66))
 
+stackedplot(t, {"NOx"}, 'XVariable', 'Data')
+
 % Statistiche complete per NOx
 dati_unici_NOx = t(:,{'Nome_staz','NOx','Temperatura', 'Pioggia_cum','Umidita_relativa','PM10','NO2', 'O3', 'Benzina_vendita_rete_ord', 'Gasolio_motori_rete_ord', 'Gasolio_riscaldamento'})
 dati_unici_NOx.Properties.VariableNames = {'Stazione','NOx', 'Temperatura','Pioggia','Umidita', 'PM10', 'NO2', 'O3', 'Benzina', 'Gasolio_motori', 'Gasolio_risc'};
@@ -254,6 +256,8 @@ lm_3_NOx = fitlm(dati_unici_NOx,'ResponseVar','NOx', 'PredictorVars',{'Umidita',
 lm_4_NOx = fitlm(dati_unici_NOx,'ResponseVar','NOx', 'PredictorVars',{'Umidita', ...
     'PM10','NO2', 'Benzina', 'Gasolio_motori'});
 
+plot(lm_4_NOx)
+title('fitlm per NOx')
 
 % Verifica del modello
 
@@ -309,3 +313,12 @@ correlazione_residui_NOx = array2table(correlazione_residui_NOx_temp, 'VariableN
 plotResiduals(lm_4_NOx, 'fitted', 'Marker','x')
 
 % 6. Ricerca degli Outliers
+residui_studentizzati = lm_4_NOx.Residuals.Studentized
+residui_studentizzati(12)
+t.NOx(12) % Valore dell'outliers
+scatter(lm_4_NOx.Fitted, residui_studentizzati)
+yline(2, '--b')
+yline(-2, '--b')
+
+stackedplot(t, {"NOx"}, 'XVariable', 'Data')
+
