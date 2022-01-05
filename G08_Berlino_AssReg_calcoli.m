@@ -323,5 +323,3 @@ yline(-2, '--b')
 % Valore del nostro outliers
 t.NOx(12)
 
-stackedplot(t, {"NOx"}, 'XVariable', "Data")
-
