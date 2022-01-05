@@ -313,12 +313,15 @@ correlazione_residui_NOx = array2table(correlazione_residui_NOx_temp, 'VariableN
 plotResiduals(lm_4_NOx, 'fitted', 'Marker','x')
 
 % 6. Ricerca degli Outliers
+% Misura per trovare gli outliers (se il residuo studentizzato è maggiore di 2 o minore di -2)
 residui_studentizzati = lm_4_NOx.Residuals.Studentized
-residui_studentizzati(12)
-t.NOx(12) % Valore dell'outliers
+
 scatter(lm_4_NOx.Fitted, residui_studentizzati)
 yline(2, '--b')
 yline(-2, '--b')
 
-stackedplot(t, {"NOx"}, 'XVariable', 'Data')
+% Valore del nostro outliers
+t.NOx(12)
+
+stackedplot(t, {"NOx"}, 'XVariable', "Data")
 
