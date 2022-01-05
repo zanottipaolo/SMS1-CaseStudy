@@ -278,8 +278,7 @@ nexttile
 plot(residui_NOx)
 ylabel('Residui')
 xlabel('Osservazioni')
-yline(0,'r','LineWidth',3)
-yline(mean(residui_NOx), 'Color', 'b', 'LineWidth', 2)
+yline(mean(residui_NOx), 'Color', 'g', 'LineWidth', 3)
 title('Grafico dei residui - NOx')
 
 % 2. Distribuzione (Normale)
