@@ -239,17 +239,17 @@ lsline
 lm_completo_NOx = fitlm(dati_unici_NOx,'ResponseVar','NOx', 'PredictorVars',{'Temperatura',...
     'Pioggia','Umidita', 'PM10','NO2', 'O3', 'Benzina', 'Gasolio_motori', 'Gasolio_risc'});
 
-% Linear Model senza la Temperatura
-lm_1_NOx = fitlm(dati_unici_NOx,'ResponseVar','NOx', 'PredictorVars',{...
-    'Pioggia','Umidita', 'PM10','NO2', 'O3', 'Benzina', 'Gasolio_motori', 'Gasolio_risc'});
-
 % Linear Model senza la Pioggia
-lm_2_NOx = fitlm(dati_unici_NOx,'ResponseVar','NOx', 'PredictorVars',{'Umidita', ...
-    'PM10','NO2', 'O3', 'Benzina', 'Gasolio_motori', 'Gasolio_risc'});
+lm_1_NOx = fitlm(dati_unici_NOx,'ResponseVar','NOx', 'PredictorVars',{...
+    'Temperatura','Umidita', 'PM10','NO2', 'O3', 'Benzina', 'Gasolio_motori', 'Gasolio_risc'});
 
 % Linear Model senza O3
-lm_3_NOx = fitlm(dati_unici_NOx,'ResponseVar','NOx', 'PredictorVars',{'Umidita', ...
-    'PM10','NO2', 'Benzina', 'Gasolio_motori', 'Gasolio_risc'});
+lm_2_NOx = fitlm(dati_unici_NOx,'ResponseVar','NOx', 'PredictorVars',{...
+    'Temperatura','Umidita', 'PM10','NO2', 'Benzina', 'Gasolio_motori', 'Gasolio_risc'});
+
+% Linear Model senza la Temperatura
+lm_3_NOx = fitlm(dati_unici_NOx,'ResponseVar','NOx', 'PredictorVars',{'Umidita', 'PM10', ...
+    'NO2', 'Benzina', 'Gasolio_motori', 'Gasolio_risc'});
 
 % Linear Model senza Gasolio Riscaldamento
 % (Modello utilizzato)
