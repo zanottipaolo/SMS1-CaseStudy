@@ -156,6 +156,8 @@ residui_studentizzati = lm6.Residuals.Studentized
 residui_studentizzati(22)
 t.PM10(22) % Valore dell'outliers
 scatter(lm6.Fitted, residui_studentizzati)
+xlabel("Fitted data")
+ylabel("Residui studentizzati")
 yline(2, '--b')
 yline(-2, '--b')
 
