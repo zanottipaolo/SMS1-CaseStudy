@@ -2,7 +2,6 @@
 % Zanotti Paolo         1074166
 % De Duro Federico      1073477
 % Ciullo Roberto        1074568
-% Bouchemal Saif        1074800
 
 load('G08.mat')
 
@@ -32,8 +31,8 @@ stat = grpstats(dati_unici,'Stazione',{'mean','std','min','max'}, 'DataVars',{'P
 
 % Matrice di correlazione tra le variabili
 corr_matrix_t = corr(dati_unici{:,2:end});
-matrice_rho_t = array2table(corr_matrix_t, 'VariableNames' ,{'PM10', 'Temperatura','Pioggia','Umidita','O3','NOx','NO2', 'Benzina', 'Gasolio_motori', 'Gasolio_risc'}, ...
-                              'RowNames', {'PM10','Temperatura','Pioggia','Umidita','O3','NOx','NO2', 'Benzina', 'Gasolio_motori', 'Gasolio_risc'})
+matrice_rho_t = array2table(corr_matrix_t, 'VariableNames' ,{'PM10', 'Temperatura','Pioggia','Umidita','NOx','NO2','O3', 'Benzina', 'Gasolio_motori', 'Gasolio_risc'}, ...
+                              'RowNames', {'PM10','Temperatura','Pioggia','Umidita','NOx','NO2','O3', 'Benzina', 'Gasolio_motori', 'Gasolio_risc'})
 
 
 [S,AX,BigAx,H,HAx] = plotmatrix(dati_unici{:,2:end});
@@ -188,8 +187,8 @@ statistiche_NOx = grpstats(dati_unici_NOx,'Stazione',{'mean','std','min','max'},
 
 % Matrice di correlazione per l'inquinante NOx
 matrice_correlazione_t = corr(dati_unici_NOx{:,2:end});
-matrice_rho_t_NOx = array2table(matrice_correlazione_t, 'VariableNames' ,{'NOx', 'Temperatura','Pioggia','Umidita','O3','PM10','NO2', 'Benzina', 'Gasolio_motori', 'Gasolio_risc'}, ...
-                              'RowNames', {'NOx','Temperatura','Pioggia','Umidita','O3','PM10','NO2', 'Benzina', 'Gasolio_motori', 'Gasolio_risc'})
+matrice_rho_t_NOx = array2table(matrice_correlazione_t, 'VariableNames' ,{'NOx', 'Temperatura','Pioggia','Umidita','PM10','NO2','O3', 'Benzina', 'Gasolio_motori', 'Gasolio_risc'}, ...
+                              'RowNames', {'NOx','Temperatura','Pioggia','Umidita','PM10','NO2','O3', 'Benzina', 'Gasolio_motori', 'Gasolio_risc'})
 
 
 % Grafici di correlazione
